@@ -1,0 +1,26 @@
+name: Build Duck Launcher EXE
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Nativefier and Build
+        run: |
+          npm install -g nativefier
+          # This command wraps your local index.html into a Windows EXE
+          nativefier --name "Duck Launcher" "file://${{ github.workspace }}/index.html" --platform "windows"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Duck-Launcher-Windows
+          path: ./*windows-x64/
