@@ -16,12 +16,14 @@ jobs:
       - name: Build Application
         run: |
           npm install -g nativefier
-          # Wraps index.html into a Windows app folder
-          nativefier --name "Duck Launcher" "file://${{ github.workspace }}/index.html" --platform "windows"
+          # Create a specific directory for the build
+          mkdir build
+          # Build index.html into the 'build' folder
+          nativefier --name "Duck Launcher" "file://${{ github.workspace }}/index.html" --platform "windows" ./build
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Duck-Launcher-Windows
-          # The '*' wildcard ensures it finds the folder even if the name includes architecture info
-          path: ./*windows*/
+          # Upload everything inside the build folder
+          path: build/
