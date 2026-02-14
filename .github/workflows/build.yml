@@ -1,4 +1,4 @@
-name: Build Duck Launcher EXE
+name: Build Duck Launcher
 on: [push]
 
 jobs:
@@ -13,14 +13,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Nativefier and Build
+      - name: Build Application
         run: |
           npm install -g nativefier
-          # This command wraps your local index.html into a Windows EXE
+          # Wraps index.html into a Windows app folder
           nativefier --name "Duck Launcher" "file://${{ github.workspace }}/index.html" --platform "windows"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Duck-Launcher-Windows
-          path: ./*windows-x64/
+          # The '*' wildcard ensures it finds the folder even if the name includes architecture info
+          path: ./*windows*/
